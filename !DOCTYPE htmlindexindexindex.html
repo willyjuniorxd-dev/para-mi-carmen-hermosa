@@ -4,131 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Para Carmen</title>
-    <!-- Cargamos las librerías 3D de forma segura -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
-    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* 1. PANTALLA DE INICIO */
-        #welcome-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mew-container {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 30px;
-            position: relative;
-            animation: float 3s ease-in-out infinite;
-        }
-        .mew-svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 15px rgba(255, 182, 193, 0.6));
-        }
-        #btn-iniciar {
-            padding: 15px 40px;
-            font-size: 16px;
-            letter-spacing: 4px;
-            color: #ffffff;
-            background: linear-gradient(135deg, rgba(255,182,193,0.2), rgba(147,112,219,0.2));
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            transition: all 0.5s ease;
-        }
-        #btn-iniciar:active {
-            background: linear-gradient(135deg, rgba(255,182,193,0.4), rgba(147,112,219,0.4));
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 0 30px rgba(255, 182, 193, 0.4);
-            transform: scale(1.05);
-        }
-
-        /* 2. INTERFAZ DE LA GALAXIA */
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 20px;
-            opacity: 0;
-            transition: opacity 3s ease 2s;
-        }
-        .main-title {
-            text-align: center;
-            color: #ffffff;
-            font-weight: 300;
-            font-size: 24px;
-            letter-spacing: 6px;
-            text-shadow: 0 0 20px rgba(255, 192, 203, 0.8), 0 0 40px rgba(147, 112, 219, 0.5);
-            animation: pulseGlow 4s ease-in-out infinite;
-        }
-        .instructions {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 11px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
-            50% { opacity: 1; filter: drop-shadow(0 0 20px rgba(255, 182, 193, 0.8)); }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000000; font-family: sans-serif; }
+        canvas { display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
+        #welcome-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 2.5s ease; }
+        .mew-container { width: 150px; height: 150px; margin-bottom: 30px; animation: float 3s ease-in-out infinite; }
+        .mew-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(255, 182, 193, 0.6)); }
+        #btn-iniciar { padding: 15px 40px; font-size: 16px; letter-spacing: 4px; color: #ffffff; background: linear-gradient(135deg, rgba(255,182,193,0.2), rgba(147,112,219,0.2)); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 30px; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); transition: all 0.5s ease; }
+        #btn-iniciar:active { background: linear-gradient(135deg, rgba(255,182,193,0.4), rgba(147,112,219,0.4)); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 0 30px rgba(255, 182, 193, 0.4); transform: scale(1.05); }
+        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 40px 20px; opacity: 0; transition: opacity 3s ease 2s; }
+        .main-title { text-align: center; color: #ffffff; font-weight: 300; font-size: 24px; letter-spacing: 6px; text-shadow: 0 0 20px rgba(255, 192, 203, 0.8), 0 0 40px rgba(147, 112, 219, 0.5); }
+        .instructions { color: rgba(255, 255, 255, 0.4); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
-
     <canvas id="universe-canvas"></canvas>
-
     <div id="welcome-screen">
         <div class="mew-container">
             <svg class="mew-svg" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
@@ -145,104 +39,64 @@
         </div>
         <button id="btn-iniciar">INICIAR</button>
     </div>
-
     <div id="ui-layer">
         <h1 class="main-title">TE AMO CARMEN</h1>
         <div class="instructions">Arrastra o haz zoom para explorar tu universo</div>
     </div>
-
-    <!-- Música de fondo (Reemplazable por cualquier enlace de audio directo) -->
     <audio id="bg-music" loop preload="auto">
         <source src="https://google.com" type="audio/ogg">
     </audio>
-
     <script>
-        const frases = [
-            "Eres mi hogar", "Eres mi mundo", "Te amo", "Te quiero", "Eres todo para mí",
-            "Mi lugar favorito eres tú", "Siempre tú", "Mi persona favorita", "Contigo, siempre", "Eres mi paz",
-            "Eres mi felicidad", "Tú y yo", "Mi lugar seguro", "Gracias por existir", "Te elegiría otra vez",
-            "Eres mi universo", "Mi corazón es tuyo", "Quiero una vida contigo", "Eres mi casualidad favorita", "Mi amor por ti no tiene límites",
-            "Eres mi estrella favorita", "Tú haces bonito mi mundo", "Me haces feliz", "Siempre voy a elegirte", "Eres mi sueño",
-            "Te pienso siempre", "Eres especial para mí", "Mi corazón te pertenece", "Eres mi luz", "Quiero estar contigo",
-            "Eres mi todo", "Mi amor", "Mi niña hermosa", "Tú eres suficiente", "Nunca olvides cuánto te amo",
-            "Gracias por llegar a mi vida", "Contigo todo es mejor", "Eres mi universo entero", "Te amo más cada día", "Para siempre contigo"
-        ];
-
-        const conceptosPlanetas = [
-            "AMOR", "CONFIANZA", "COMUNICACIÓN", "RESPETO", "LEALTAD",
-            "BONDAD", "PACIENCIA", "COMPLICIDAD", "APOYO", "FELICIDAD"
-        ];
-
-        const coloresGalaxia = {
-            fondo: 0x000000,
-            violeta: 0x480ca8,
-            rosaSutil: 0xf72585,
-            oroEstrella: 0xffd700
-        };
-
-        let scene, camera, renderer, controls;
-        let particulasGalaxia, solCorazon;
-        let planetas = [];
-        let mixFrasesTexto = [];
-        let enTransicion = false;
-        let tiempoGalaxia = 0;
-
-        const canvas = document.getElementById('universe-canvas');
-        const btnIniciar = document.getElementById('btn-iniciar');
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const uiLayer = document.getElementById('ui-layer');
-        const bgMusic = document.getElementById('bg-music');
-
+        const frases = ["Eres mi hogar", "Eres mi mundo", "Te amo", "Te quiero", "Eres todo para mí", "Mi lugar favorito eres tú", "Siempre tú", "Mi persona favorita", "Contigo, siempre", "Eres mi paz", "Eres mi felicidad", "Tú y yo", "Mi lugar seguro", "Gracias por existir", "Te elegiría otra vez", "Eres mi universo", "Mi corazón es tuyo", "Quiero una vida contigo", "Eres mi casualidad favorita", "Mi amor por ti no tiene límites", "Eres mi estrella favorita", "Tú haces bonito mi mundo", "Me haces feliz", "Siempre voy a elegirte", "Eres mi sueño", "Te pienso siempre", "Eres especial para mí", "Mi corazón te pertenece", "Eres mi luz", "Quiero estar contigo", "Eres mi todo", "Mi amor", "Mi niña hermosa", "Tú eres suficiente", "Nunca olvides cuánto te amo", "Gracias por llegar a mi vida", "Contigo todo es mejor", "Eres mi universo entero", "Te amo más cada día", "Para siempre contigo"];
+        const conceptosPlanetas = ["AMOR", "CONFIANZA", "COMUNICACIÓN", "RESPETO", "LEALTAD", "BONDAD", "PACIENCIA", "COMPLICIDAD", "APOYO", "FELICIDAD"];
+        let scene, camera, renderer, controls, particulasGalaxia, solCorazon, planetas = [], mixFrasesTexto = [], enTransicion = false, tiempoGalaxia = 0;
+        const canvas = document.getElementById('universe-canvas'), btnIniciar = document.getElementById('btn-iniciar'), welcomeScreen = document.getElementById('welcome-screen'), uiLayer = document.getElementById('ui-layer'), bgMusic = document.getElementById('bg-music');
         function init() {
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(coloresGalaxia.fondo, 0.0015);
-
+            scene.fog = new THREE.FogExp2(0x000000, 0.0015);
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 0, 15);
-
             renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-
             controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.maxDistance = 300;
-            controls.minDistance = 15;
-            controls.enabled = false;
-
-            const luzAmbiente = new THREE.AmbientLight(0x444444);
-            scene.add(luzAmbiente);
-
-            const luzCentral = new THREE.PointLight(0xffb6c1, 2, 200);
-            scene.add(luzCentral);
-
-            crearGalaxiaPolvo();
-            crearSolCorazon();
-            crearPlanetasRelacion();
-            crearConstelacionesFrases();
-
-            window.addEventListener('resize', onWindowResize);
-            btnIniciar.addEventListener('click', comenzarExperiencia);
-
+            controls.enableDamping = true; controls.dampingFactor = 0.05; controls.maxDistance = 300; controls.minDistance = 15; controls.enabled = false;
+            const luzAmbiente = new THREE.AmbientLight(0x444444); scene.add(luzAmbiente);
+            const luzCentral = new THREE.PointLight(0xffb6c1, 2, 200); scene.add(luzCentral);
+            crearGalaxiaPolvo(); crearSolCorazon(); crearPlanetasRelacion(); crearConstelacionesFrases();
+            window.addEventListener('resize', onWindowResize); btnIniciar.addEventListener('click', comenzarExperiencia);
             animate();
         }
-
         function crearGalaxiaPolvo() {
-            const numeroParticulas = 35000;
-            const geometria = new THREE.BufferGeometry();
-            const posiciones = new Float32Array(numeroParticulas * 3);
-            const colores = new Float32Array(numeroParticulas * 3);
-
-            const colorRosa = new THREE.Color(coloresGalaxia.rosaSutil);
-            const colorVioleta = new THREE.Color(coloresGalaxia.violeta);
-            const colorOro = new THREE.Color(coloresGalaxia.oroEstrella);
-
-            for (let i = 0; i < numeroParticulas; i++) {
-                const brazo = i % 3;
-                const distanciaCentro = Math.pow(Math.random(), 2.5) * 160 + 4;
-                const anguloEspiral = distanciaCentro * 0.18 + (brazo * ((2 * Math.PI) / 3));
-                
-                const x = Math.cos(anguloEspiral) * distanciaCentro + (Math.random() - 0.5) * (distanciaCentro * 0.2);
-                const y = (Math.random() - 0.5) * 6;
+            const num = 35000, geo = new THREE.BufferGeometry(), pos = new Float32Array(num * 3), col = new Float32Array(num * 3);
+            const cRosa = new THREE.Color(0xf72585), cVioleta = new THREE.Color(0x480ca8), cOro = new THREE.Color(0xffd700);
+            for (let i = 0; i < num; i++) {
+                const b = i % 3, d = Math.pow(Math.random(), 2.5) * 160 + 4, a = d * 0.18 + (b * ((2 * Math.PI) / 3));
+                pos[i * 3] = Math.cos(a) * d + (Math.random() - 0.5) * (d * 0.2);
+                pos[i * 3 + 1] = (Math.random() - 0.5) * 6;
+                pos[i * 3 + 2] = Math.sin(a) * d + (Math.random() - 0.5) * (d * 0.2);
+                let c = cVioleta.clone();
+                if (d < 40) c.lerp(cRosa, d / 40); else c.lerp(cOro, (d - 40) / 120);
+                col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+            }
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+            const tCan = document.createElement('canvas'); tCan.width = 16; tCan.height = 16;
+            const ctx = tCan.getContext('2d'), g = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+            g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 16);
+            const mat = new THREE.PointsMaterial({ size: 1.0, map: new THREE.CanvasTexture(tCan), vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false });
+            particulasGalaxia = new THREE.Points(geo, mat); scene.add(particulasGalaxia);
+        }
+        function crearSolCorazon() {
+            const f = new THREE.Shape(); f.moveTo(5, 5); f.bezierCurveTo(5, 5, 4, 0, 0, 0); f.bezierCurveTo(-6, 0, -6, 7, -6, 7); f.bezierCurveTo(-6, 11, -3, 15.4, 5, 19); f.bezierCurveTo(12, 15.4, 16, 11, 16, 7); f.bezierCurveTo(16, 7, 16, 0, 10, 0); f.bezierCurveTo(7, 0, 5, 5, 5, 5);
+            const geo = new THREE.ExtrudeGeometry(f, { depth: 2, bevelEnabled: true, bevelSize: 0.5, bevelThickness: 0.5 }); geo.center();
+            solCorazon = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0xff3355 })); solCorazon.scale.set(0.6, 0.6, 0.6); solCorazon.rotation.x = Math.PI; scene.add(solCorazon);
+        }
+        function crearPlanetasRelacion() {
+            const pal = [0x560bad, 0x3a0ca3, 0x4361ee, 0x4cc9f0, 0xf72585, 0x7209b7, 0xb5179e, 0x480ca8, 0x3f37c9, 0x4895ef];
+            conceptosPlanetas.forEach((n, idx) => {
+                const r = Math.random() * 1.5 + 2, geo = new THREE.SphereGeometry(r, 24, 24), can = document.createElement('canvas');
+                can.width = 512; can.height = 256; const ctx = can.getContext('2d'), grad = ctx.createLinearGradient(0, 0, 512, 256);
+                grad.addColorStop(0, '#020205'); grad.addColorStop(0.5, '#' + pal[idx].toString(16).padStart(6, '0')); grad.addColorStop(1, '#050510');
+                ctx.fillStyle = grad; ctx.fillRect(0, 0, 512, 256); ctx.font = 'bold 38px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#ffffff'; ctx.fillText(n, 256, 128);
+                const p = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: new THREE.CanvasTexture(can), roughness: 0.5 }));
+const d = 35 + (idx * 12), a = (idx * (Math.PI * 2)) / 10;p.position.x = Math.cos(a) * d; p.position.z = Math.sin(a) * d; p.position.y = (Math.random() - 0.5) * 10;p.userData = { distancia: d, velocidad: 0.003 + (idx * 0.0005), angulo: a }; scene.add(p); planetas.push(p);});}function crearConstelacionesFrases() {for (let i = 0; i < 100; i++) {const txt = frases[i % frases.length], can = document.createElement('canvas'), ctx = can.getContext('2d');ctx.font = '22px Georgia, serif'; const med = ctx.measureText(txt); can.width = med.width + 20; can.height = 40;ctx.font = '22px Georgia, serif'; ctx.fillStyle = '#ffea00'; ctx.shadowColor = '#ffaa00'; ctx.shadowBlur = 4; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(txt, can.width / 2, 20);const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(can), transparent: true, blending: THREE.AdditiveBlending }));const rad = 25 + Math.random() * 120, al = Math.random() * Math.PI * 2, be = (Math.random() - 0.5) * Math.PI * 0.3;spr.position.x = Math.cos(al) * Math.cos(be) * rad; spr.position.z = Math.sin(al) * Math.cos(be) * rad; spr.position.y = Math.sin(be) * rad;spr.scale.set(can.width / 40, 1.5, 1); scene.add(spr); mixFrasesTexto.push(spr);}}function comenzarExperiencia() {if (enTransicion) return; enTransicion = true; bgMusic.play().catch(() => {});welcomeScreen.style.opacity = '0'; setTimeout(() => welcomeScreen.style.display = 'none', 2500);let prog = 0;function cinematica() {prog += 0.008; const rot = prog * Math.PI * 3, rAct = 15 + (115 * prog);camera.position.x = Math.sin(rot) * rAct; camera.position.z = Math.cos(rot) * rAct; camera.position.y = THREE.MathUtils.lerp(0, 60, prog); camera.lookAt(0, 0, 0);if (prog < 1) requestAnimationFrame(cinematica); else { camera.position.set(0, 60, 130); controls.enabled = true; uiLayer.style.opacity = '1'; }}cinematica();}function animate() {requestAnimationFrame(animate); tiempoGalaxia += 0.001;if (particulasGalaxia) particulasGalaxia.rotation.y = tiempoGalaxia * 1.5;if (solCorazon) { solCorazon.rotation.z = -tiempoGalaxia * 3; const p = 0.6 + Math.sin(tiempoGalaxia * 25) * 0.02; solCorazon.scale.set(p, p, p); }planetas.forEach((p) => { p.userData.angulo += p.userData.velocidad; p.position.x = Math.cos(p.userData.angulo) * p.userData.distancia; p.position.z = Math.sin(p.userData.angulo) * p.userData.distancia; p.rotation.y += 0.01; });controls.update(); renderer.render(scene, camera);}function onWindowResize() { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }window.onload = init;
