@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Para Carmen</title>
+    <!-- Cargamos las librerías 3D de forma segura -->
+    <script src="https://cloudflare.com"></script>
+    <script src="https://jsdelivr.net"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000000;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* 1. PANTALLA DE INICIO */
+        #welcome-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mew-container {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+        .mew-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(255, 182, 193, 0.6));
+        }
+        #btn-iniciar {
+            padding: 15px 40px;
+            font-size: 16px;
+            letter-spacing: 4px;
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(255,182,193,0.2), rgba(147,112,219,0.2));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            transition: all 0.5s ease;
+        }
+        #btn-iniciar:active {
+            background: linear-gradient(135deg, rgba(255,182,193,0.4), rgba(147,112,219,0.4));
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 30px rgba(255, 182, 193, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* 2. INTERFAZ DE LA GALAXIA */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transition: opacity 3s ease 2s;
+        }
+        .main-title {
+            text-align: center;
+            color: #ffffff;
+            font-weight: 300;
+            font-size: 24px;
+            letter-spacing: 6px;
+            text-shadow: 0 0 20px rgba(255, 192, 203, 0.8), 0 0 40px rgba(147, 112, 219, 0.5);
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+        .instructions {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 20px rgba(255, 182, 193, 0.8)); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="universe-canvas"></canvas>
+
+    <div id="welcome-screen">
+        <div class="mew-container">
+            <svg class="mew-svg" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
+                <path d="M50 20C35 20 28 32 30 45C32 58 42 65 50 65C58 65 68 58 70 45C72 32 65 20 50 20Z" fill="#FFC0CB"/>
+                <path d="M32 28C25 22 20 30 25 38C26 40 30 36 32 28Z" fill="#FFC0CB"/>
+                <path d="M68 28C75 22 80 30 75 38C74 40 70 36 68 28Z" fill="#FFC0CB"/>
+                <circle cx="43" cy="42" r="4" fill="#4682B4"/>
+                <circle cx="44" cy="41" r="1.5" fill="white"/>
+                <circle cx="57" cy="42" r="4" fill="#4682B4"/>
+                <circle cx="58" cy="41" r="1.5" fill="white"/>
+                <path d="M48 50C48 50 50 48 52 50" stroke="#FF82AB" stroke-width="2" stroke-linecap="round"/>
+                <path d="M50 65C45 75 35 80 20 82C40 85 55 78 50 65Z" fill="#FFC0CB"/>
+            </svg>
+        </div>
+        <button id="btn-iniciar">INICIAR</button>
+    </div>
+
+    <div id="ui-layer">
+        <h1 class="main-title">TE AMO CARMEN</h1>
+        <div class="instructions">Arrastra o haz zoom para explorar tu universo</div>
+    </div>
+
+    <!-- Música de fondo (Reemplazable por cualquier enlace de audio directo) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://google.com" type="audio/ogg">
+    </audio>
+
+    <script>
+        const frases = [
+            "Eres mi hogar", "Eres mi mundo", "Te amo", "Te quiero", "Eres todo para mí",
+            "Mi lugar favorito eres tú", "Siempre tú", "Mi persona favorita", "Contigo, siempre", "Eres mi paz",
+            "Eres mi felicidad", "Tú y yo", "Mi lugar seguro", "Gracias por existir", "Te elegiría otra vez",
+            "Eres mi universo", "Mi corazón es tuyo", "Quiero una vida contigo", "Eres mi casualidad favorita", "Mi amor por ti no tiene límites",
+            "Eres mi estrella favorita", "Tú haces bonito mi mundo", "Me haces feliz", "Siempre voy a elegirte", "Eres mi sueño",
+            "Te pienso siempre", "Eres especial para mí", "Mi corazón te pertenece", "Eres mi luz", "Quiero estar contigo",
+            "Eres mi todo", "Mi amor", "Mi niña hermosa", "Tú eres suficiente", "Nunca olvides cuánto te amo",
+            "Gracias por llegar a mi vida", "Contigo todo es mejor", "Eres mi universo entero", "Te amo más cada día", "Para siempre contigo"
+        ];
+
+        const conceptosPlanetas = [
+            "AMOR", "CONFIANZA", "COMUNICACIÓN", "RESPETO", "LEALTAD",
+            "BONDAD", "PACIENCIA", "COMPLICIDAD", "APOYO", "FELICIDAD"
+        ];
+
+        const coloresGalaxia = {
+            fondo: 0x000000,
+            violeta: 0x480ca8,
+            rosaSutil: 0xf72585,
+            oroEstrella: 0xffd700
+        };
+
+        let scene, camera, renderer, controls;
+        let particulasGalaxia, solCorazon;
+        let planetas = [];
+        let mixFrasesTexto = [];
+        let enTransicion = false;
+        let tiempoGalaxia = 0;
+
+        const canvas = document.getElementById('universe-canvas');
+        const btnIniciar = document.getElementById('btn-iniciar');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const uiLayer = document.getElementById('ui-layer');
+        const bgMusic = document.getElementById('bg-music');
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(coloresGalaxia.fondo, 0.0015);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 15);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxDistance = 300;
+            controls.minDistance = 15;
+            controls.enabled = false;
+
+            const luzAmbiente = new THREE.AmbientLight(0x444444);
+            scene.add(luzAmbiente);
+
+            const luzCentral = new THREE.PointLight(0xffb6c1, 2, 200);
+            scene.add(luzCentral);
+
+            crearGalaxiaPolvo();
+            crearSolCorazon();
+            crearPlanetasRelacion();
+            crearConstelacionesFrases();
+
+            window.addEventListener('resize', onWindowResize);
+            btnIniciar.addEventListener('click', comenzarExperiencia);
+
+            animate();
+        }
+
+        function crearGalaxiaPolvo() {
+            const numeroParticulas = 35000;
+            const geometria = new THREE.BufferGeometry();
+            const posiciones = new Float32Array(numeroParticulas * 3);
+            const colores = new Float32Array(numeroParticulas * 3);
+
+            const colorRosa = new THREE.Color(coloresGalaxia.rosaSutil);
+            const colorVioleta = new THREE.Color(coloresGalaxia.violeta);
+            const colorOro = new THREE.Color(coloresGalaxia.oroEstrella);
+
+            for (let i = 0; i < numeroParticulas; i++) {
+                const brazo = i % 3;
+                const distanciaCentro = Math.pow(Math.random(), 2.5) * 160 + 4;
+                const anguloEspiral = distanciaCentro * 0.18 + (brazo * ((2 * Math.PI) / 3));
+                
+                const x = Math.cos(anguloEspiral) * distanciaCentro + (Math.random() - 0.5) * (distanciaCentro * 0.2);
+                const y = (Math.random() - 0.5) * 6;
